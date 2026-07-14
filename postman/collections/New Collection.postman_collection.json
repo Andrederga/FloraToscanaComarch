@@ -1,0 +1,209 @@
+{
+  "info": {
+    "_postman_id": "1e79504f-c45c-4bbd-95cc-92c9c6c6a5d7",
+    "name": "SAP",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Business Partner",
+      "item": [
+        {
+          "name": "Read",
+          "id": "15d5841e-3b9a-43c3-9d6c-196fa1213f71",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "uuid": "25cd90ab-c8a8-48b1-97ad-0d5b33201a3c"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text",
+                "uuid": "8078f771-59f5-4655-8b8a-ccfb5304d2ad"
+              }
+            ],
+            "url": {
+              "raw": "https://my427213-api.s4hana.cloud.sap/sap/opu/odata/sap/API_BUSINESS_PARTNER/A_BusinessPartner?%24top=50",
+              "protocol": "https",
+              "host": [
+                "my427213-api",
+                "s4hana",
+                "cloud",
+                "sap"
+              ],
+              "path": [
+                "sap",
+                "opu",
+                "odata",
+                "sap",
+                "API_BUSINESS_PARTNER",
+                "A_BusinessPartner"
+              ],
+              "query": [
+                {
+                  "key": "%24top",
+                  "value": "50",
+                  "uuid": "c6830052-db09-438c-8708-fcecf4e6ad8d"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "5e324843-586a-4595-8ff5-6e143ed3b69c"
+    },
+    {
+      "name": "Sales Order",
+      "item": [
+        {
+          "name": "Create",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b6459122-03d8-4588-8c95-4efd4de47318",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "a301f7c5-2aee-4c4a-803b-e88f9d0216c5",
+                "exec": [
+                  "if (pm.request.method === \"POST\") {\r",
+                  "    // Risolve le variabili ({{dev_url}} ecc.) nell'URL reale\r",
+                  "    const fullUrl = pm.variables.replaceIn(pm.request.url.toString());\r",
+                  "\r",
+                  "    // Taglia dopo lo '0001/' -> service root, che qui rilascia il token\r",
+                  "    let rootUrl = fullUrl.split(/[?#]/)[0];\r",
+                  "    const m = rootUrl.match(/^(.*\\/0001\\/)/);\r",
+                  "    if (m) rootUrl = m[1];\r",
+                  "    else rootUrl = rootUrl.replace(/\\/[^\\/]+\\/?$/, \"/\"); // fallback: togli l'entity\r",
+                  "\r",
+                  "    const authHeader = \"Basic \" + btoa(\r",
+                  "        pm.variables.get(\"username\") + \":\" + pm.variables.get(\"password\")\r",
+                  "    );\r",
+                  "\r",
+                  "    pm.sendRequest({\r",
+                  "        url: rootUrl,\r",
+                  "        method: \"GET\",\r",
+                  "        header: {\r",
+                  "            \"X-CSRF-Token\": \"Fetch\",\r",
+                  "            \"Accept\": \"application/json\",\r",
+                  "            \"Authorization\": authHeader\r",
+                  "        }\r",
+                  "    }, function (err, res) {\r",
+                  "        if (err) { console.error(\"Fetch CSRF fallito:\", err); return; }\r",
+                  "        const token = res.headers.get(\"x-csrf-token\");\r",
+                  "        console.log(\"Fetch \" + rootUrl + \" → \" + res.code + \" | token: \" + (token || \"(vuoto)\"));\r",
+                  "        if (token && token.toLowerCase() !== \"required\" && token.toLowerCase() !== \"fetch\") {\r",
+                  "            pm.collectionVariables.set(\"csrfToken\", token);\r",
+                  "            pm.request.headers.upsert({ key: \"X-CSRF-Token\", value: token });\r",
+                  "            console.log(\"✅ Token applicato\");\r",
+                  "        }\r",
+                  "    });\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "965bc3a9-dc73-466e-bfc4-830172dc2593",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "uuid": "25cd90ab-c8a8-48b1-97ad-0d5b33201a3c"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text",
+                "uuid": "8078f771-59f5-4655-8b8a-ccfb5304d2ad"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"SalesOrderType\": \"TA\",\r\n  \"SoldToParty\": \"1000006\",\r\n  \"SalesOrganization\": \"PF10\",\r\n  \"DistributionChannel\": \"GD\",\r\n  \"OrganizationDivision\": \"10\",\r\n  \"PurchaseOrderByCustomer\": \"Created via ODV4 API\",\r\n  \"_Item\": [\r\n    {\r\n      \"Product\": \"DISTDIRS065SA1\",\r\n      \"RequestedQuantity\": 10,\r\n      \"RequestedQuantityISOUnit\": \"PCE\",\r\n      \"_ItemPricingElement\": [\r\n        {\r\n          \"ConditionType\": \"PMP0\",\r\n          \"ConditionRateAmount\": 45.98,\r\n          \"ConditionCurrency\": \"EUR\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{DEV_URL}}/sap/opu/odata4/sap/api_salesorder/srvd_a2x/sap/salesorder/0001/SalesOrder",
+              "host": [
+                "{{DEV_URL}}"
+              ],
+              "path": [
+                "sap",
+                "opu",
+                "odata4",
+                "sap",
+                "api_salesorder",
+                "srvd_a2x",
+                "sap",
+                "salesorder",
+                "0001",
+                "SalesOrder"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Fetch token",
+          "id": "ed735ad6-0b7e-42bc-a847-8f34a3ee86f9",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "0acdb18b-cac2-4611-a11a-cb9768cdfee0"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{username}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{password}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "id": "d6fbe257-0db4-49d5-b339-a8f0e26657f5",
+      "key": "csrfToken",
+      "value": ""
+    }
+  ]
+}
