@@ -179,6 +179,109 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Create Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b6459122-03d8-4588-8c95-4efd4de47318",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "a301f7c5-2aee-4c4a-803b-e88f9d0216c5",
+                "exec": [
+                  "if (pm.request.method === \"POST\") {\r",
+                  "    // Risolve le variabili ({{dev_url}} ecc.) nell'URL reale\r",
+                  "    const fullUrl = pm.variables.replaceIn(pm.request.url.toString());\r",
+                  "\r",
+                  "    // Taglia dopo lo '0001/' -> service root, che qui rilascia il token\r",
+                  "    let rootUrl = fullUrl.split(/[?#]/)[0];\r",
+                  "    const m = rootUrl.match(/^(.*\\/0001\\/)/);\r",
+                  "    if (m) rootUrl = m[1];\r",
+                  "    else rootUrl = rootUrl.replace(/\\/[^\\/]+\\/?$/, \"/\"); // fallback: togli l'entity\r",
+                  "\r",
+                  "    const authHeader = \"Basic \" + btoa(\r",
+                  "        pm.variables.get(\"username\") + \":\" + pm.variables.get(\"password\")\r",
+                  "    );\r",
+                  "\r",
+                  "    pm.sendRequest({\r",
+                  "        url: rootUrl,\r",
+                  "        method: \"GET\",\r",
+                  "        header: {\r",
+                  "            \"X-CSRF-Token\": \"Fetch\",\r",
+                  "            \"Accept\": \"application/json\",\r",
+                  "            \"Authorization\": authHeader\r",
+                  "        }\r",
+                  "    }, function (err, res) {\r",
+                  "        if (err) { console.error(\"Fetch CSRF fallito:\", err); return; }\r",
+                  "        const token = res.headers.get(\"x-csrf-token\");\r",
+                  "        console.log(\"Fetch \" + rootUrl + \" → \" + res.code + \" | token: \" + (token || \"(vuoto)\"));\r",
+                  "        if (token && token.toLowerCase() !== \"required\" && token.toLowerCase() !== \"fetch\") {\r",
+                  "            pm.collectionVariables.set(\"csrfToken\", token);\r",
+                  "            pm.request.headers.upsert({ key: \"X-CSRF-Token\", value: token });\r",
+                  "            console.log(\"✅ Token applicato\");\r",
+                  "        }\r",
+                  "    });\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "c796d8a4-7b87-468d-a130-3138d48ffd0b",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "uuid": "25cd90ab-c8a8-48b1-97ad-0d5b33201a3c"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text",
+                "uuid": "8078f771-59f5-4655-8b8a-ccfb5304d2ad"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"ShippingPoint\": \"PF10\",\r\n    \"to_DeliveryDocumentItem\": {\r\n        \"results\": [\r\n            {\r\n                \"ReferenceSDDocument\": \"287\"\r\n            }\r\n        ]\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{DEV_URL}}/sap/opu/odata/sap/API_OUTBOUND_DELIVERY_SRV;v=2/A_OutbDeliveryHeader",
+              "host": [
+                "{{DEV_URL}}"
+              ],
+              "path": [
+                "sap",
+                "opu",
+                "odata",
+                "sap",
+                "API_OUTBOUND_DELIVERY_SRV;v=2",
+                "A_OutbDeliveryHeader"
+              ]
+            }
+          },
+          "response": []
         }
       ],
       "id": "0acdb18b-cac2-4611-a11a-cb9768cdfee0"
@@ -201,7 +304,7 @@
   },
   "variable": [
     {
-      "id": "d6fbe257-0db4-49d5-b339-a8f0e26657f5",
+      "id": "ce615294-c8fa-4ef1-bdff-b9701bd23c30",
       "key": "csrfToken",
       "value": ""
     }
