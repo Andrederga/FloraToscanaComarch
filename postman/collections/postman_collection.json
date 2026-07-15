@@ -28,13 +28,9 @@
               }
             ],
             "url": {
-              "raw": "https://my427213-api.s4hana.cloud.sap/sap/opu/odata/sap/API_BUSINESS_PARTNER/A_BusinessPartner?%24top=50",
-              "protocol": "https",
+              "raw": "{{DEV_URL}}/sap/opu/odata/sap/API_BUSINESS_PARTNER/A_BusinessPartner?%24top=50",
               "host": [
-                "my427213-api",
-                "s4hana",
-                "cloud",
-                "sap"
+                "{{DEV_URL}}"
               ],
               "path": [
                 "sap",
@@ -350,7 +346,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"_Reference\": [\r\n        {\r\n            \"SDDocument\": \"80017574\"//this can be a delivery or a salesorder\r\n        }\r\n    ]\r\n}",
+              "raw": "",
               "options": {
                 "raw": {
                   "language": "json"
@@ -460,7 +456,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"_Reference\": [\r\n        {\r\n            \"SDDocument\": \"80017574\"//this can be a delivery or a salesorder\r\n        }\r\n    ]\r\n}",
+              "raw": "",
               "options": {
                 "raw": {
                   "language": "json"
@@ -468,7 +464,7 @@
               }
             },
             "url": {
-              "raw": "{{DEV_URL}}/sap/opu/odata/sap/API_OUTBOUND_DELIVERY_SRV;v=2/PickAllItems?DeliveryDocument='80000001'",
+              "raw": "{{DEV_URL}}/sap/opu/odata/sap/API_OUTBOUND_DELIVERY_SRV;v=2/PostGoodsIssue?DeliveryDocument='80000001'",
               "host": [
                 "{{DEV_URL}}"
               ],
@@ -478,7 +474,7 @@
                 "odata",
                 "sap",
                 "API_OUTBOUND_DELIVERY_SRV;v=2",
-                "PickAllItems"
+                "PostGoodsIssue"
               ],
               "query": [
                 {
