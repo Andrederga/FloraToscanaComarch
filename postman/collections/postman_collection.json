@@ -136,7 +136,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"SalesOrderType\": \"TA\",\r\n  \"SoldToParty\": \"1000006\",\r\n  \"SalesOrganization\": \"PF10\",\r\n  \"DistributionChannel\": \"GD\",\r\n  \"OrganizationDivision\": \"10\",\r\n  \"PurchaseOrderByCustomer\": \"Created via ODV4 API\",\r\n  \"_Item\": [\r\n    {\r\n      \"Product\": \"DISTDIRS065SA1\",\r\n      \"RequestedQuantity\": 10,\r\n      \"RequestedQuantityISOUnit\": \"PCE\",\r\n      \"_ItemPricingElement\": [\r\n        {\r\n          \"ConditionType\": \"PMP0\",\r\n          \"ConditionRateAmount\": 45.98,\r\n          \"ConditionCurrency\": \"EUR\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}",
+              "raw": "{\r\n  \"SalesOrderType\": \"TA\",\r\n  \"SoldToParty\": \"1000006\",\r\n  \"SalesOrganization\": \"PF10\",\r\n  \"DistributionChannel\": \"GD\",\r\n  \"OrganizationDivision\": \"10\",\r\n  \"PurchaseOrderByCustomer\": \"Created via ODV4 API\",\r\n  \"_Item\": [\r\n    {\r\n      \"Product\": \"DISTDIRS065SA1\",\r\n      \"RequestedQuantity\": 10,\r\n      \"RequestedQuantityISOUnit\": \"PCE\",\r\n      \"Plant\" : \"PF10\",\r\n      \"StorageLocation\" : \"M001\",\r\n      \"_ItemPricingElement\": [\r\n        {\r\n          \"ConditionType\": \"PMP0\",\r\n          \"ConditionRateAmount\": 45.98,\r\n          \"ConditionCurrency\": \"EUR\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -243,7 +243,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"ShippingPoint\": \"PF10\",\r\n    \"to_DeliveryDocumentItem\": {\r\n        \"results\": [\r\n            {\r\n                \"ReferenceSDDocument\": \"287\"\r\n            }\r\n        ]\r\n    }\r\n}",
+              "raw": "{\r\n    \"to_DeliveryDocumentItem\": {\r\n        \"results\": [\r\n            {\r\n                \"ReferenceSDDocument\": \"299\"\r\n            }\r\n        ]\r\n    }\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -628,7 +628,7 @@
   },
   "variable": [
     {
-      "id": "c2384685-e4b2-448a-b8de-dd0297c1a7eb",
+      "id": "6f08c085-6622-4725-853b-5e2c17dd258d",
       "key": "csrfToken",
       "value": ""
     }
